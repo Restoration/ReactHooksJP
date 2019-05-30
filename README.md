@@ -32,6 +32,72 @@ Hooksを使用することでクラスやHOC、render propsの代わりに常に
 ## どのように使うのか？
 
 ### HOCの代用
+Higher Order Componentの代用は以下のように使用する。
+以下は、マウスの位置情報を取得するコード
+```withMousePosition.jsx
+import React from 'react';
+
+// Using Higher Order Component
+function withMousePosition(WrappedComponent) {
+  return class extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { x: 0, y: 0 };
+    }
+
+    componentDidMount() {
+      window.addEventListener("mousemove", this.handleMouseMove);
+    }
+
+    componentWillUnmount() {
+      window.removeEventListener("mousemove", this.handleMouseMove);
+    }
+
+    handleMouseMove = event => {
+      this.setState({
+        x: event.clientX,
+        y: event.clientY
+      });
+    };
+
+    render() {
+      return (
+        <WrappedComponent
+          {...this.props}
+          mousePosition={this.state}
+        />
+      );
+    }
+  };
+}
+export default withMousePosition;
+```
+
+
+App.js側で使用する
+```App.js
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+import withMousePosition from './withMousePosition';
+import useMousePosition from './useMousePosition';
+
+function App(props) {
+  const { x, y } = props.mousePosition;
+
+  return (
+    <div className="App">
+      <h1>Higher-Order Component Method</h1>
+      <h2>Move the mouse around!</h2>
+      <p style={{ background: "orange" }}>
+        The current mouse position is ({x}, {y})
+      </p>
+    </div>
+  );
+}
+export default withMousePosition(App);
+```
+
 
 ### Render propsの代用
 
