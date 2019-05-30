@@ -16,24 +16,23 @@ Version 16.8から追加された新機能。ざっくりと言えば、関数�
 ## 使うメリット
 - 関数での記述で細かく分解できるのでコンポーネントの肥大化を防ぎ、テストがしやすくなる
 - 複雑なデザインパターンをしなくてもよくなる（render propsやHOC）
-- コード量がclassに比べて少ない
-- classよりも綺麗に書ける
-
+- コード量がclassに比べて少ない、classよりも綺麗に書ける
 
 
 Hooksを使用することでコンポーネント内のロジックを再利用可能な独立した単位としてまとめることができる。
 これはつまり、Hooksを使用することでReact本来の思想（明示的なデータフローと構成）に近づく
 
-
 そんなに関数ばかり書いてたら肥大化するんじゃないのか？
 結論からしてむしろ減る。
 Hooksを使用することでクラスやHOC、render propsの代わりに常に関数を使用する。
+コードの書き方も関数ベースで進むので複雑化しないため規則的になる。
 
 ## どのように使うのか？
+HOC、render props, Reduxを例に使い方を見ていく。
 
 ### HOCの代用
-Higher Order Componentの代用は以下のように使用する。
-以下は、マウスの位置情報を取得するコード
+実際にHooksでHOCを代用した例を[サンプルコード](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)と一緒に見てみる。
+Higher Order Componentを使用してマウスの位置情報を取得する。
 ```withMousePosition.jsx
 import React from 'react';
 
@@ -127,12 +126,12 @@ export default useMousePosition;
 ```
 
 
+App.js側で実行する
 ```App.js
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import useMousePosition from './useMousePosition';
-
 
 // For React Hooks
 function App() {
@@ -152,15 +151,45 @@ function App() {
 export default App;
 ```
 
-まず目に止まるのがコード量が減るという点。コードが読みやすいのは読みやすいのは後者。
+まず目に止まるのがHOCと比べてコード量が減るという点。コードが読みやすいの明らかに後者。
+次に気になる点としてはuseStateとuseEffectが何をしているのか？
+
+- [useState](https://reactjs.org/docs/hooks-state.html)
+- [useEffect](https://reactjs.org/docs/hooks-effect.html)
 
 
-### Render propsの代用
+useState_  
+関数内でステート管理をするために必要で、useStateの引数にてstateを定義しており、初期値にあたります。
+
+```JavaScript
+// useState({ x: 0, y: 0 })は初期値の設定でclassでいうコンストラクタの部分にあたる
+constructor(props) {
+    super(props);
+    this.state = {
+        x: 0,
+        y: 0,
+    };
+}
+```
+
+useStateはこの関数に含まれているstateを更新する２つの関数をを返します
+```JavaScript
+const [mousePosition, setMousePosition]
+```
+
+- mousePosition 状態値
+- setMousePosition 値を更新する関数
+
+関数の下部からreturnでmousePositionが返ってきてるのがわかります。
+
+### render propsの代用
 
 
-## Reduxの代用になるのか？
-結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
-なのでReduxを使うのかReactHooks+Context APIによる実装で代用するかはプロジェクトに依存する。
+### Reduxの代用
+Reduxの代用はできるのか？結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
+HooksとContext APIを使用してReduxのような動きをさせるというものになる。
+なのでReduxを使うのかReactHooks+Context APIによる実装でReduxの代用するかはプロジェクトに依存する。
+
 
 
 
