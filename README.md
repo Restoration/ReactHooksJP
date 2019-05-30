@@ -80,7 +80,6 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import withMousePosition from './withMousePosition';
-import useMousePosition from './useMousePosition';
 
 function App(props) {
   const { x, y } = props.mousePosition;
@@ -97,6 +96,63 @@ function App(props) {
 }
 export default withMousePosition(App);
 ```
+
+次にHooksで書いた例
+```useMousePosition.js
+import React, { useState, useEffect } from 'react';
+
+// Using Hooks
+function useMousePosition() {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  function handleMouseMove(event) {
+    setMousePosition({
+      x: event.clientX,
+      y: event.clientY
+    });
+  }
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
+
+  return mousePosition;
+}
+
+export default useMousePosition;
+```
+
+
+```App.js
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+import useMousePosition from './useMousePosition';
+
+
+// For React Hooks
+function App() {
+  const { x, y } = useMousePosition();
+
+  return (
+    <div className="App">
+      <h1>React Hook Method</h1>
+      <h2>Move the mouse around!</h2>
+      <p style={{ background: "palegreen" }}>
+        The current mouse position is ({x}, {y})
+      </p>
+    </div>
+  );
+}
+
+export default App;
+```
+
+まず目に止まるのがコード量が減るという点。コードが読みやすいのは読みやすいのは後者。
 
 
 ### Render propsの代用

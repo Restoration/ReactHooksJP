@@ -1,41 +1,11 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import withMousePosition from './withMousePosition';
+import useMousePosition from './useMousePosition';
 
-
-function withMousePosition(WrappedComponent) {
-  return class extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = { x: 0, y: 0 };
-    }
-
-    componentDidMount() {
-      window.addEventListener("mousemove", this.handleMouseMove);
-    }
-
-    componentWillUnmount() {
-      window.removeEventListener("mousemove", this.handleMouseMove);
-    }
-
-    handleMouseMove = event => {
-      this.setState({
-        x: event.clientX,
-        y: event.clientY
-      });
-    };
-
-    render() {
-      return (
-        <WrappedComponent
-          {...this.props}
-          mousePosition={this.state}
-        />
-      );
-    }
-  };
-}
-function App(props) {
+// For Higher Order Component
+function AppHOC(props) {
   const { x, y } = props.mousePosition;
 
   return (
@@ -49,4 +19,20 @@ function App(props) {
   );
 }
 
-export default withMousePosition(App);
+// For React Hooks
+function AppHOOKS() {
+  const { x, y } = useMousePosition();
+
+  return (
+    <div className="App">
+      <h1>React Hook Method</h1>
+      <h2>Move the mouse around!</h2>
+      <p style={{ background: "palegreen" }}>
+        The current mouse position is ({x}, {y})
+      </p>
+    </div>
+  );
+}
+
+//export default withMousePosition(AppHOC); // HOCを使用する
+export default AppHOOKS; // Hooksを使用する
