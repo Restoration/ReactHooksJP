@@ -30,13 +30,15 @@ Hooksを使用することでクラスやHOC、render propsの代わりに常に
 ## どのように使うのか？
 HOC、render props, Reduxを例に使い方を見ていく。
 
-### HOCの代用
-実際にHooksでHOCを代用した例を[サンプルコード](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)と一緒に見てみる。
-Higher Order Componentを使用してマウスの位置情報を取得する。
+実際にHooksでHOCとrender propsを代用してみる。
+[サンプルコード](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
+マウスの位置情報を取得するコードを参考に見てみる。。
+
+
+### HOC
 ```withMousePosition.jsx
 import React from 'react';
 
-// Using Higher Order Component
 function withMousePosition(WrappedComponent) {
   return class extends React.Component {
     constructor(props) {
@@ -72,13 +74,9 @@ function withMousePosition(WrappedComponent) {
 export default withMousePosition;
 ```
 
-
-App.js側で使用する
 ```App.js
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import withMousePosition from './withMousePosition';
+import React from "react";
+import withMousePosition from "./withMousePosition";
 
 function App(props) {
   const { x, y } = props.mousePosition;
@@ -96,7 +94,71 @@ function App(props) {
 export default withMousePosition(App);
 ```
 
-次にHooksで書いた例
+### render props
+```MousePosition.jsx
+import React from "react";
+
+class MousePosition extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { x: 0, y: 0 };
+  }
+
+  componentDidMount() {
+    window.addEventListener("mousemove", this.handleMouseMove);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("mousemove", this.handleMouseMove);
+  }
+
+  handleMouseMove = event => {
+    this.setState({
+      x: event.clientX,
+      y: event.clientY
+    });
+  };
+
+  render() {
+    return (
+      <div
+        style={{ height: "100%", width: "100%" }}
+        onMouseMove={this.handleMouseMove}
+      >
+        {this.props.render(this.state)}
+      </div>
+    );
+  }
+}
+
+export default MousePosition;
+```
+
+```App.jsx
+import React from "react";
+import MousePosition from "./MousePosition";
+
+function App() {
+  return (
+    <div className="App">
+      <h1>Render Props Method</h1>
+      <h2>Move the mouse around!</h2>
+      <MousePosition
+        render={mousePosition => (
+          <p style={{ background: "skyblue" }}>
+            The current mouse position is ({mousePosition.x}, {mousePosition.y})
+          </p>
+        )}
+      />
+    </div>
+  );
+}
+
+export default App;
+```
+
+
+### Hooks
 ```useMousePosition.js
 import React, { useState, useEffect } from 'react';
 
@@ -125,8 +187,6 @@ function useMousePosition() {
 export default useMousePosition;
 ```
 
-
-App.js側で実行する
 ```App.js
 import React from 'react';
 import logo from './logo.svg';
@@ -150,9 +210,8 @@ function App() {
 
 export default App;
 ```
-
-まず目に止まるのがHOCと比べてコード量が減るという点。コードが読みやすいの明らかに後者。
-次に気になる点としてはuseStateとuseEffectが何をしているのか？
+まず目に止まるのがHOCやrender propsと比べてコード量が減るという点。コードが読みやすいの明らかにHooks。
+気になる点としてはHooksでuseStateとuseEffectが何をしているのか？
 
 - [useState](https://reactjs.org/docs/hooks-state.html)
 - [useEffect](https://reactjs.org/docs/hooks-effect.html)
@@ -182,14 +241,12 @@ const [mousePosition, setMousePosition]
 
 関数の下部からreturnでmousePositionが返ってきてるのがわかります。
 
-### render propsの代用
 
 
 ### Reduxの代用
 Reduxの代用はできるのか？結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
 HooksとContext APIを使用してReduxのような動きをさせるというものになる。
 なのでReduxを使うのかReactHooks+Context APIによる実装でReduxの代用するかはプロジェクトに依存する。
-
 
 
 
