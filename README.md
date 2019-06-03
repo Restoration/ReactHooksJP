@@ -6,6 +6,10 @@
 Version 16.8から追加された新機能。ざっくりと言えば、関数でもステート管理ができるようになった。
 従来のReactのfunction componentはステートレスな関数でstate管理ができなかった。
 なのでstate管理をしたい場合は、class componentを使う必要があったがfunction componentでも使えるようになった。
+基本的なコンセプトは変わっていないので、props, state, context, refs, and lifecycleはHooksで書いても使えます。
+
+[公式ドキュメント](https://github.com/reactjs/reactjs.org/blob/master/content/docs/hooks-intro.md)
+
 
 
 [React Today and Tomorrow and 90% Cleaner React With Hooks](https://www.youtube.com/watch?v=dpw9EHDh2bM)
@@ -28,12 +32,42 @@ Hooksを使用することでクラスやHOC、render propsの代わりに常に
 コードの書き方も関数ベースで進むので複雑化しないため規則的になる。
 
 ## どのように使うのか？
-HOC、render props, Reduxを例に使い方を見ていく。
+まず基本となるHooks関数を理解する必要があります。
 
-実際にHooksでHOCとrender propsを代用してみる。
-[サンプルコード](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
-マウスの位置情報を取得するコードを参考に見てみる。。
+- [useState](https://reactjs.org/docs/hooks-state.html)
+- [useEffect](https://reactjs.org/docs/hooks-effect.html)
 
+### useState_  
+関数内で状態管理をするために必要なHook関数になります、useStateの引数でstateを定義しており、引数に渡された値が初期値にあたります。
+classコンポーネントでいうコンストラクタ内で定義するthis.stateにあたります。
+useStateとthis.stateを比較したコードは[コチラ](https://reactjs.org/docs/hooks-state.html)
+
+次に、useStateは関数に含まれている現在の値と更新する関数の２つを返します、この2つはペアで返ってきます。
+```
+import React, { useState } from 'react';
+
+function Example() {
+  // const = [現在の値, 更新用の関数] = useState(初期値);
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+## useEffect
+
+
+
+## 従来のコードとの比較
+マウスの位置情報を取得するコードをHOCとrender propsで書き、Hooksで代用してみます。
+参照元は[コチラ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)。
 
 ### HOC
 ```withMousePosition.jsx
@@ -188,12 +222,9 @@ export default useMousePosition;
 ```
 
 ```App.js
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-import useMousePosition from './useMousePosition';
+import React from "react";
+import useMousePosition from "./useMousePosition";
 
-// For React Hooks
 function App() {
   const { x, y } = useMousePosition();
 
@@ -207,41 +238,8 @@ function App() {
     </div>
   );
 }
-
 export default App;
 ```
-まず目に止まるのがHOCやrender propsと比べてコード量が減るという点。コードが読みやすいの明らかにHooks。
-気になる点としてはHooksでuseStateとuseEffectが何をしているのか？
-
-- [useState](https://reactjs.org/docs/hooks-state.html)
-- [useEffect](https://reactjs.org/docs/hooks-effect.html)
-
-
-useState_  
-関数内でステート管理をするために必要で、useStateの引数にてstateを定義しており、初期値にあたります。
-
-```JavaScript
-// useState({ x: 0, y: 0 })は初期値の設定でclassでいうコンストラクタの部分にあたる
-constructor(props) {
-    super(props);
-    this.state = {
-        x: 0,
-        y: 0,
-    };
-}
-```
-
-useStateはこの関数に含まれているstateを更新する２つの関数をを返します
-```JavaScript
-const [mousePosition, setMousePosition]
-```
-
-- mousePosition 状態値
-- setMousePosition 値を更新する関数
-
-関数の下部からreturnでmousePositionが返ってきてるのがわかります。
-
-
 
 ### Reduxの代用
 Reduxの代用はできるのか？結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
