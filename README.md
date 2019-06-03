@@ -62,8 +62,26 @@ function Example() {
 ```
 
 ## useEffect
+ライフサイクルメソッドのComponentDidMountにあたる関数で、デフォルトでは常にレンダー終了時に関数を実行させています。
+オプショナルとして第二引数には変数の配列を渡すことが可能で、第二引数を使った場合はuseEffectの関数は第二引数の値が変更されたタイミングで実行されます。
+また、第二引数は空の配列を渡すことも可能です。
 
+```
+// 第二引数なし
+useEffect(() => {
+  console.log('常にレンダー終了後に実行');
+});
 
+// 第二引数あり
+useEffect(() => {
+  console.log('paramで渡された値が変更されたとき実行');
+}, [param]);
+
+// 空で渡した場合
+useEffect(() => {
+  console.log('一回だけ実行');
+}, []);
+```
 
 ## 従来のコードとの比較
 マウスの位置情報を取得するコードをHOCとrender propsで書き、Hooksで代用してみます。
@@ -247,7 +265,8 @@ HooksとContext APIを使用してReduxのような動きをさせるという�
 なのでReduxを使うのかReactHooks+Context APIによる実装でReduxの代用するかはプロジェクトに依存する。
 
 
-
 ## 参考リンク
 - [Making Sense of React Hooks](https://medium.com/@dan_abramov/making-sense-of-react-hooks-fdbde8803889)
 - [React Hooks: Making it easier to compose, reuse, and share React code ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
+- [State Management with React Hooks — No Redux or Context API](https://medium.com/javascript-in-plain-english/state-management-with-react-hooks-no-redux-or-context-api-8b3035ceecf8)
+
