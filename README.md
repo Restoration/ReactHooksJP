@@ -263,6 +263,11 @@ export default App;
 Reduxの代用はできるのか？結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
 HooksとContext APIを使用してReduxのような動きをさせるというものになる。
 なのでReduxを使うのかReactHooks+Context APIによる実装でReduxの代用するかはプロジェクトに依存する。
+現状ステートの一元管理をするのであれば以下の３パターンが考えられる
+
+- [React Class Component with Redux](https://react-redux.js.org/introduction/quick-start)
+- [React Hooks with Redux](https://react-redux.js.org/next/api/hooks)
+- [React Hooks with Context API]()
 
 
 ## 参考リンク
