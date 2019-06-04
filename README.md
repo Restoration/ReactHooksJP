@@ -1,7 +1,6 @@
 # ReactHooksJP
 
 ## 目次
-====
 - [ReactHooksとは](#ReactHooksとは)
 - [使うメリット](#使うメリット)
 - [どのように使うのか？](#どのように使うのか？)
@@ -31,12 +30,12 @@ Version 16.8から追加された新機能。ざっくりと言えば、関数�
 
 Hooksを使用することでコンポーネント内のロジックを再利用可能な独立した単位としてまとめることができる。つまり、Hooksを使用することでReact本来の思想（明示的なデータフローと構成）に近づく。
 
-そんなに関数ばかり書いてたら肥大化するんじゃないのか？__結論からしてむしろ減る。__  
-Hooksを使用することでクラスやHOC、render propsの代わりに常に関数を使用する。
-__コードの書き方も関数ベースで進むので複雑化しないため規則的になる。__
+また、クラスやHOC、render propsの代わりに常に関数を使用するので　__コードの書き方も関数で統一されて規則的になる。__
+そのため複雑化しないので見通しがよくなります。
 
 ## どのように使うのか？
-まず基本となるHooks関数を理解する必要があります。ポイントとして抑えておくべきは以下の３つ
+まず基本となるHooks関数を理解する必要があります。  
+ポイントとして抑えておくべきは以下の３つ
 
 - [useState](https://reactjs.org/docs/hooks-state.html)
 - [useEffect](https://reactjs.org/docs/hooks-effect.html)
@@ -70,7 +69,7 @@ function Example() {
 ```
 
 ### useEffect
-ライフサイクルメソッドのComponentDidMountにあたる関数で、デフォルトでは常にレンダー終了時に関数を実行させています。
+ライフサイクルメソッドのComponentDidMountにあたる関数で、デフォルトでは常にレンダー終了時に関数を実行させています。  
 オプショナルとして第二引数には変数の配列を渡すことが可能で、第二引数を使った場合はuseEffectの関数は第二引数の値が変更されたタイミングで実行されます。  
 また、第二引数は空の配列を渡すことも可能です、もし空配列を渡した場合は一回だけ実行されます。
 
@@ -95,6 +94,7 @@ useEffect(() => {
 
 ## Hooksにおけるルール
 Hooksを使用する上で気をつけないといけないポイントがあります。以下の３つのルールがあります。
+
 - Hooksを呼び出すのはトップレベルのみ、つまりrenderなどでの呼び出しは不可
 - ネストした関数やループ内、if文での条件で呼び出すことは不可
 - Hooksが呼び出せるのはReactFunction、つまりクラスでの呼び出しや標準のJavaScript関数では不可
@@ -121,10 +121,11 @@ $ npm install eslint-plugin-react-hooks --save-dev
 ```
 
 ## ContextAPIとは
-[Context](https://reactjs.org/docs/context.html)
+[Context](https://reactjs.org/docs/context.html)  
 Context APIはReactにおいては標準搭載なので外部のプラグイン等のインストールは不要です。Context APIとはいわゆる __グローバルで扱えるprops__ に当たります。従来のpropsではコンポーネントごとに渡す必要がありましたが、Context APIを使用した場合は、以下のようにどこからでも呼び出しが可能となります。  
+
 以下の図を見てもらえば理解しやすいです。
-[引用元](https://blog.bitsrc.io/why-you-should-consider-the-new-context-api-in-react-a-deep-dive-d588b66c57b5)
+[引用元](https://blog.bitsrc.io/why-you-should-consider-the-new-context-api-in-react-a-deep-dive-d588b66c57b5)  
 ![Context API](https://cdn-images-1.medium.com/max/2400/1*Jx8BCxZFN2SCuhQtZqfgMQ.jpeg "Context API")
 
 
