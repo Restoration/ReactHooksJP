@@ -1,7 +1,7 @@
 # ReactHooksJP
 
 ## 目次
---
+====
 - [ReactHooksとは](#ReactHooksとは)
 - [使うメリット](#使うメリット)
 - [どのように使うのか？](#どのように使うのか？)
@@ -120,7 +120,7 @@ $ npm install eslint-plugin-react-hooks --save-dev
 }
 ```
 
-## Context APIとは
+## ContextAPIとは
 [Context](https://reactjs.org/docs/context.html)
 Context APIはReactにおいては標準搭載なので外部のプラグイン等のインストールは不要です。Context APIとはいわゆる __グローバルで扱えるprops__ に当たります。従来のpropsではコンポーネントごとに渡す必要がありましたが、Context APIを使用した場合は、以下のようにどこからでも呼び出しが可能となります。  
 以下の図を見てもらえば理解しやすいです。
