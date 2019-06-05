@@ -12,8 +12,7 @@
 - [参考リンク](#参考リンク)
 
 ## はじめに
-React Hooksについて取り上げたリポジトリになります。2019年6月現在では、React Hooksに関して、あまり日本語の情報がなかったため日本語で情報配信をするためにもここに書いていきます。あくまで公式ではなく、自分が勉強した内容を記載しています。
-もしも間違っている箇所や認識が違っていたりしたら気軽にPRを送っていただければと思います。
+React Hooksについて取り上げたリポジトリになります。2019年6月現在では、React Hooksに関して、あまり日本語の情報がなかったため日本語で情報配信をするためにもここに書いていきます。公式とは一切関係なく、あくまで自分が勉強した内容を記載しています。もしも間違っている箇所や認識が違っていたりしたら気軽にPRを送っていただければと思います。
 
 またリポジトリだけでなくWikiにもコードを記載しているので、コードだけ読みたい方は[こちら](https://github.com/Restoration/ReactHooksJP/wiki)へ
 
@@ -333,7 +332,8 @@ HooksとContext APIを使用してReduxのような動きをさせるという�
 - [React Hooks with Redux](https://react-redux.js.org/next/api/hooks)
 - [React Hooks with Context API]()
 
-まずは、Hooksを使用した最小構成のReduxコードを見てみましょう。
+まずは、Hooksを使用した最小構成のReduxコードを見てみましょう。  
+Reduxのnpmパッケージは含まず、HooksだけでReduxの動きを完結させます。
 ```javascript
 // useReducerはHooks内に含まれます
 import React, { useReducer } from 'react';
