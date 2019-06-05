@@ -335,7 +335,7 @@ HooksとContext APIを使用してReduxのような動きをさせるという�
 まずは、Hooksを使用した最小構成のReduxコードを見てみましょう。  
 Reduxのnpmパッケージは含まず、HooksだけでReduxの動きを完結させます。
 ```javascript
-// useReducerはHooks内に含まれます
+// useReducerはReact内に含まれます
 import React, { useReducer } from 'react';
 
 const initialState = 0;
@@ -364,51 +364,7 @@ const  App = () => {
 export default App;
 ```
 
-
-複数の値に対して
-```javascript
-import React, { useReducer } from 'react';
-
-const initialState = {
-  count1: 0,
-  count2: 0,
-};
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'increment1': return { ...state, count1: state.count1 + 1 };
-    case 'decrement1': return { ...state, count1: state.count1 - 1 };
-    case 'set1': return { ...state, count1: action.count };
-    case 'increment2': return { ...state, count2: state.count2 + 1 };
-    case 'decrement2': return { ...state, count2: state.count2 - 1 };
-    case 'set2': return { ...state, count2: action.count };
-    default: throw new Error('Unexpected action');
-  }
-};
-
-const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  return (
-    <>
-      <div>
-        {state.count1}
-        <button onClick={() => dispatch({ type: 'increment1' })}>+1</button>
-        <button onClick={() => dispatch({ type: 'decrement1' })}>-1</button>
-        <button onClick={() => dispatch({ type: 'set1', count: 0 })}>reset</button>
-      </div>
-      <div>
-        {state.count2}
-        <button onClick={() => dispatch({ type: 'increment2' })}>+1</button>
-        <button onClick={() => dispatch({ type: 'decrement2' })}>-1</button>
-        <button onClick={() => dispatch({ type: 'set2', count: 0 })}>reset</button>
-      </div>
-    </>
-  );
-};
-```
-
-上記のコードは分割することも可能で、下記のように書いた方が綺麗になります。
-こんな風に使えるって思って知っておくとよいかもしれません。
-
+複数に対して
 ```javascript
 import React, { useReducer } from 'react';
 
@@ -423,7 +379,7 @@ const reducer = (state, action) => {
 };
 
 const App = () => {
-  // この場合処理は一緒なのでここでフックさせてる
+  // 処理は一緒なのでここでフックさせてる
   const [count1, dispatch1] = useReducer(reducer, initialState);
   const [count2, dispatch2] = useReducer(reducer, initialState);
   return (
@@ -452,4 +408,4 @@ export default App;
 - [Making Sense of React Hooks](https://medium.com/@dan_abramov/making-sense-of-react-hooks-fdbde8803889)
 - [React Hooks: Making it easier to compose, reuse, and share React code ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
 - [State Management with React Hooks — No Redux or Context API](https://medium.com/javascript-in-plain-english/state-management-with-react-hooks-no-redux-or-context-api-8b3035ceecf8)
-[How to use useReducer in React Hooks for performance optimization](https://medium.com/crowdbotics/how-to-use-usereducer-in-react-hooks-for-performance-optimization-ecafca9e7bf5)
+- [How to use useReducer in React Hooks for performance optimization](https://medium.com/crowdbotics/how-to-use-usereducer-in-react-hooks-for-performance-optimization-ecafca9e7bf5)
