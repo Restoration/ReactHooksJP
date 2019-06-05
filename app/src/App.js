@@ -5,6 +5,7 @@ import { Route, NavLink, BrowserRouter } from "react-router-dom";
 import AppHooks from "./Hooks/App";
 import AppHOC from "./HOC/App";
 import AppRenderProps from "./RenderProps/App";
+import ReduxHooks from "./ReduxHooks/App";
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <li><NavLink to="/hoc" className="App-link">HOC</NavLink></li>
           <li><NavLink to="/renderprops" className="App-link">RenderProps</NavLink></li>
           <li><NavLink to="/hooks" className="App-link">Hooks</NavLink></li>
+          <li><NavLink to="/reduxhooks" className="App-link">ReduxHooks</NavLink></li>
         </ul>
         <a
           className="App-link"
@@ -40,6 +42,7 @@ function Main() {
             <Route path="/hooks" component={AppHooks}/>
             <Route path="/renderprops"  render={(props) => <AppRenderProps {...props}/>} />
             <Route path="/hoc" render={(props) => <AppHOC {...props}/>} />
+            <Route path="/reduxhooks" render={(props) => <ReduxHooks {...props}/>} />
           </div>
         </div>
       </BrowserRouter>

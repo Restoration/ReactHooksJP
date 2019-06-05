@@ -1,13 +1,23 @@
 # ReactHooksJP
 
 ## 目次
+- [はじめに](#はじめに)
 - [ReactHooksとは](#ReactHooksとは)
 - [使うメリット](#使うメリット)
 - [どのように使うのか？](#どのように使うのか？)
 - [Hooksにおけるルール](#Hooksにおけるルール)
 - [Context APIとは](#ContextAPIとは)
 - [従来のコードとの比較](#従来のコードとの比較)
+- [Redux](#Redux)
 - [参考リンク](#参考リンク)
+
+## はじめに
+React Hooksについて取り上げたリポジトリになります。2019年6月現在では、React Hooksに関して、あまり日本語の情報がなかったため日本語で情報配信をするためにもここに書いていきます。公式とは一切関係なく、あくまで自分が勉強した内容を記載しています。もしも間違っている箇所や認識が違っていたりしたら気軽にPRを送っていただければと思います。
+
+またリポジトリだけでなくWikiにもコードを記載しているので、コードだけ読みたい方は[こちら](https://github.com/Restoration/ReactHooksJP/wiki)へ
+
+[RyotArch](https://www.developer-ryota.com/)
+
 
 
 ## ReactHooksとは 
@@ -312,7 +322,7 @@ function App() {
 export default App;
 ```
 
-### Redux
+## Redux
 Reduxの代用はできるのか？結論からしてReduxの代用にはなる。ただし、もともとのコンセプトが違う。
 HooksとContext APIを使用してReduxのような動きをさせるというものになる。
 なのでReduxを使うのかReactHooks+Context APIによる実装でReduxの代用するかはプロジェクトに依存する。
@@ -322,9 +332,124 @@ HooksとContext APIを使用してReduxのような動きをさせるという�
 - [React Hooks with Redux](https://react-redux.js.org/next/api/hooks)
 - [React Hooks with Context API]()
 
+まずは、Hooksを使用した最小構成のReduxコードを見てみましょう。  
+Reduxのnpmパッケージは含まず、HooksだけでReduxの動きを完結させます。
+```javascript
+// useReducerはHooks内に含まれます
+import React, { useReducer } from 'react';
+
+const initialState = 0;
+const reducer = (state, action) => {
+  switch (action) {
+    case 'increment': return state + 1;
+    case 'decrement': return state - 1;
+    case 'reset': return 0;
+    default: throw new Error('Unexpected action');
+  }
+};
+
+const  App = () => {
+  // const [現在の値, 更新用関数] = useReducer(reducer関数, 初期値);
+  const [count, dispatch] = useReducer(reducer, initialState);
+  return (
+    <div>
+      {count}
+      <button onClick={() => dispatch('increment')}>+1</button>
+      <button onClick={() => dispatch('decrement')}>-1</button>
+      <button onClick={() => dispatch('reset')}>reset</button>
+    </div>
+  );
+};
+
+export default App;
+```
+
+
+複数の値に対して
+```javascript
+import React, { useReducer } from 'react';
+
+const initialState = {
+  count1: 0,
+  count2: 0,
+};
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment1': return { ...state, count1: state.count1 + 1 };
+    case 'decrement1': return { ...state, count1: state.count1 - 1 };
+    case 'set1': return { ...state, count1: action.count };
+    case 'increment2': return { ...state, count2: state.count2 + 1 };
+    case 'decrement2': return { ...state, count2: state.count2 - 1 };
+    case 'set2': return { ...state, count2: action.count };
+    default: throw new Error('Unexpected action');
+  }
+};
+
+const App = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  return (
+    <>
+      <div>
+        {state.count1}
+        <button onClick={() => dispatch({ type: 'increment1' })}>+1</button>
+        <button onClick={() => dispatch({ type: 'decrement1' })}>-1</button>
+        <button onClick={() => dispatch({ type: 'set1', count: 0 })}>reset</button>
+      </div>
+      <div>
+        {state.count2}
+        <button onClick={() => dispatch({ type: 'increment2' })}>+1</button>
+        <button onClick={() => dispatch({ type: 'decrement2' })}>-1</button>
+        <button onClick={() => dispatch({ type: 'set2', count: 0 })}>reset</button>
+      </div>
+    </>
+  );
+};
+```
+
+上記のコードは分割することも可能で、下記のように書いた方が綺麗になります。
+こんな風に使えるって思って知っておくとよいかもしれません。
+
+```javascript
+import React, { useReducer } from 'react';
+
+const initialState = 0;
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'increment': return state + 1;
+    case 'decrement': return state - 1;
+    case 'set': return action.count;
+    default: throw new Error('Unexpected action');
+  }
+};
+
+const App = () => {
+  // この場合処理は一緒なのでここでフックさせてる
+  const [count1, dispatch1] = useReducer(reducer, initialState);
+  const [count2, dispatch2] = useReducer(reducer, initialState);
+  return (
+    <>
+      <div>
+        {count1}
+        <button onClick={() => dispatch1({ type: 'increment' })}>+1</button>
+        <button onClick={() => dispatch1({ type: 'decrement' })}>-1</button>
+        <button onClick={() => dispatch1({ type: 'set', count: 0 })}>reset</button>
+      </div>
+      <div>
+        {count2}
+        <button onClick={() => dispatch2({ type: 'increment' })}>+1</button>
+        <button onClick={() => dispatch2({ type: 'decrement' })}>-1</button>
+        <button onClick={() => dispatch2({ type: 'set', count: 0 })}>reset</button>
+      </div>
+    </>
+  );
+};
+
+export default App;
+```
+
 
 ## 参考リンク
 - [Making Sense of React Hooks](https://medium.com/@dan_abramov/making-sense-of-react-hooks-fdbde8803889)
 - [React Hooks: Making it easier to compose, reuse, and share React code ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
 - [State Management with React Hooks — No Redux or Context API](https://medium.com/javascript-in-plain-english/state-management-with-react-hooks-no-redux-or-context-api-8b3035ceecf8)
-
+[How to use useReducer in React Hooks for performance optimization](https://medium.com/crowdbotics/how-to-use-usereducer-in-react-hooks-for-performance-optimization-ecafca9e7bf5)
