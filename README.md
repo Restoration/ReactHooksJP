@@ -1,4 +1,4 @@
-# ReactHooksJP
+# ReactHooks 日本語ドキュメント
 
 ## 目次
 - [はじめに](#はじめに)
@@ -15,9 +15,6 @@
 React Hooksについて取り上げたリポジトリになります。2019年6月現在では、React Hooksに関して、あまり日本語の情報がなかったため日本語で情報配信をするためにもここに書いていきます。公式とは一切関係なく、あくまで自分が勉強した内容を記載しています。もしも間違っている箇所や認識が違っていたりしたら気軽にPRを送っていただければと思います。
 
 またリポジトリだけでなくWikiにもコードを記載しているので、コードだけ読みたい方は[こちら](https://github.com/Restoration/ReactHooksJP/wiki)へ
-
-[RyotArch](https://www.developer-ryota.com/)
-
 
 
 ## ReactHooksとは 
@@ -409,3 +406,7 @@ export default App;
 - [React Hooks: Making it easier to compose, reuse, and share React code ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
 - [State Management with React Hooks — No Redux or Context API](https://medium.com/javascript-in-plain-english/state-management-with-react-hooks-no-redux-or-context-api-8b3035ceecf8)
 - [How to use useReducer in React Hooks for performance optimization](https://medium.com/crowdbotics/how-to-use-usereducer-in-react-hooks-for-performance-optimization-ecafca9e7bf5)
+
+
+## Author
+[RyotArch](https://www.developer-ryota.com/)
