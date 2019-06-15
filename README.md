@@ -1,4 +1,4 @@
-# ReactHooksJP
+# ReactHooks 日本語ドキュメント
 
 ## 目次
 - [はじめに](#はじめに)
@@ -15,9 +15,6 @@
 React Hooksについて取り上げたリポジトリになります。2019年6月現在では、React Hooksに関して、あまり日本語の情報がなかったため日本語で情報配信をするためにもここに書いていきます。公式とは一切関係なく、あくまで自分が勉強した内容を記載しています。もしも間違っている箇所や認識が違っていたりしたら気軽にPRを送っていただければと思います。
 
 またリポジトリだけでなくWikiにもコードを記載しているので、コードだけ読みたい方は[こちら](https://github.com/Restoration/ReactHooksJP/wiki)へ
-
-[RyotArch](https://www.developer-ryota.com/)
-
 
 
 ## ReactHooksとは 
@@ -101,6 +98,13 @@ useEffect(() => {
 ```
 
 ### useContext
+useContextはContextの値を受け取るための関数になります。
+例えば、Providerから渡された子コンポーネントはuseContextを使用することで値を受け取ることが可能になります。
+```
+import SomthingContext from "somthingContext";
+const ctx = useContext(SomthingContext);
+console.log(ctx); // somthingContextで定義された値を受け取ることができる
+```
 
 ## Hooksにおけるルール
 Hooksを使用する上で気をつけないといけないポイントがあります。以下の３つのルールがあります。
@@ -137,6 +141,98 @@ Context APIはReactにおいては標準搭載なので外部のプラグイン�
 以下の図を見てもらえば理解しやすいです。
 [引用元](https://blog.bitsrc.io/why-you-should-consider-the-new-context-api-in-react-a-deep-dive-d588b66c57b5)  
 ![Context API](https://cdn-images-1.medium.com/max/2400/1*Jx8BCxZFN2SCuhQtZqfgMQ.jpeg "Context API")
+
+### ContextAPIの使用例
+Contextを定義、Context.Providerで値を渡す、ContextConsumerで値を受け取る、この流れで行います。
+以下のコードは上記のフローに加えて、親コンポーネントからContextを子コンポーネントに渡し、親コンポーネントのステータスを変更するコードになります。
+
+従来のClassを使用
+```App.jsx
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+// set the defaults
+const LanguageContext = React.createContext({
+  language: "en",
+  setLanguage: () => {}
+});
+
+class LanguageSwitcher extends React.Component {
+  render() {
+    return (
+      <LanguageContext.Consumer>
+        {({ language, setLanguage }) => (
+          <button onClick={() => setLanguage("jp")}>
+            Switch Language (Current: {language})
+          </button>
+        )}
+      </LanguageContext.Consumer>
+    );
+  }
+}
+class App extends React.Component {
+  setLanguage = language => {
+    this.setState({ language });
+  };
+
+  state = {
+    language: "en",
+    setLanguage: this.setLanguage
+  };
+
+  render() {
+    return (
+      <LanguageContext.Provider value={this.state}>
+        <h2>Current Language: {this.state.language}</h2>
+        <p>Click button to change to jp</p>
+        <div>
+          {/* Can be nested */}
+          <LanguageSwitcher />
+        </div>
+      </LanguageContext.Provider>
+    );
+  }
+}
+
+export default App;
+```
+React Hooksの場合
+```App.jsx
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+// set the defaults
+const LanguageContext = React.createContext({
+  language: "en",
+});
+
+const LanguageSwitcher = () => {
+  return (
+    <LanguageContext.Consumer>
+      {({ state, setState }) => (
+        <button onClick={() => {setState("jp")} }>
+          Switch Language (Current: {state})
+        </button>
+      )}
+    </LanguageContext.Consumer>
+  );
+}
+const App = () => {
+  const [state, setState] = React.useState("en");
+  return (
+    <LanguageContext.Provider value={ {state,setState} }>
+      <h2>Current Language: {state}</h2>
+      <p>Click button to change to jp</p>
+      <div>
+        <LanguageSwitcher />
+      </div>
+    </LanguageContext.Provider>
+  );
+}
+export default App;
+```
 
 
 ## 従来のコードとの比較
@@ -409,3 +505,8 @@ export default App;
 - [React Hooks: Making it easier to compose, reuse, and share React code ](https://dev.to/exodevhub/react-hooks-making-it-easier-to-compose-reuse-and-share-react-code-5he9)
 - [State Management with React Hooks — No Redux or Context API](https://medium.com/javascript-in-plain-english/state-management-with-react-hooks-no-redux-or-context-api-8b3035ceecf8)
 - [How to use useReducer in React Hooks for performance optimization](https://medium.com/crowdbotics/how-to-use-usereducer-in-react-hooks-for-performance-optimization-ecafca9e7bf5)
+- [How to update React Context from inside a child component?](https://stackoverflow.com/questions/41030361/how-to-update-react-context-from-inside-a-child-component)
+
+
+## Author
+[RyotArch](https://www.developer-ryota.com/)
