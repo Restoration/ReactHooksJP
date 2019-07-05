@@ -1,4 +1,5 @@
 # ReactHooks 日本語ドキュメント
+![React](https://github.com/Restoration/ReactHooksJP/tree/master/app/reactjs.jpg "ReactJS")
 
 ## 目次
 - [はじめに](#はじめに)
@@ -79,6 +80,7 @@ function Example() {
 ライフサイクルメソッドのComponentDidMountにあたる関数で、デフォルトでは常にレンダー終了時に関数を実行させています。  
 オプショナルとして第二引数には変数の配列を渡すことが可能で、第二引数を使った場合はuseEffectの関数は第二引数の値が変更されたタイミングで実行されます。  
 また、第二引数は空の配列を渡すことも可能です、もし空配列を渡した場合は一回だけ実行されます。
+useEffect内ではループが実行されています
 
 ```javascript
 // 第二引数なし
@@ -197,7 +199,7 @@ class App extends React.Component {
 
 export default App;
 ```
-React Hooksの場合
+簡単な例
 ```App.jsx
 import React from 'react';
 import logo from './logo.svg';
